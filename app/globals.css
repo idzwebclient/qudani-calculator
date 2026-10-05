@@ -64,8 +64,8 @@ input:focus { border-color: #5ba88b; background: #fff; box-shadow: 0 0 0 3px rgb
 .input-with-icon svg { position: absolute; left: 13px; top: 14px; color: #77837c; pointer-events: none; }
 .input-with-icon input { padding-left: 40px; }
 /* iOS Safari: input tarikh abaikan width dan terkeluar dari kotak tanpa ini. */
-input[type="date"] { -webkit-appearance: none; appearance: none; display: block; max-width: 100%; text-align: left; }
-input[type="date"]::-webkit-date-and-time-value { text-align: left; }
+input[type="date"] { -webkit-appearance: none; appearance: none; display: block; max-width: 100%; text-align: left; line-height: 46px; }
+input[type="date"]::-webkit-date-and-time-value { text-align: left; margin: 0; line-height: 46px; }
 .rows { display: grid; gap: 10px; }
 .entry { display: grid; align-items: end; gap: 10px; background: #f7f9f7; border: 1px solid #e3e8e5; border-radius: 12px; padding: 12px; }
 .purchase-entry { grid-template-columns: 34px 1.2fr 1fr 1fr 38px; }
