@@ -4,8 +4,8 @@
 // Add future configuration values here.
 // ======================================
 
-const CONFIG = {
+export const CONFIG = {
   // Buffer Harga (RM/g)
   // Change this value whenever buffer changes.
-  BUFFER_HARGA: 10
+  BUFFER_HARGA: 10,
 };
