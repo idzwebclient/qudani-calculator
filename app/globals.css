@@ -111,8 +111,9 @@ pre { margin: 0; padding: 22px 2px; white-space: pre-wrap; word-break: break-wor
 @media (max-width: 620px) {
   body:has(.mobile-action) { padding-bottom: calc(82px + env(safe-area-inset-bottom)); }
   .topbar { padding-left: 14px; padding-right: 14px; }
-  .brand small { display: none; }
-  .tab { padding: 0 12px; }
+  .brand div { display: none; }
+  .tabs { min-width: 0; }
+  .tab { padding: 0 9px; gap: 4px; }
   .page-shell { width: min(100% - 24px, 1220px); }
   .intro { padding: 30px 4px 24px; }
   .intro h1 { font-size: 36px; }
