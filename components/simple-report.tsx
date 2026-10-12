@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { BadgeDollarSign, Banknote, CalendarDays, Check, ChevronRight, ClipboardCopy, Minus, Store } from "lucide-react";
+import { BadgeDollarSign, Banknote, CalendarDays, Check, ChevronRight, ClipboardCopy, Coins, Minus, Store } from "lucide-react";
 
 const DRAFT_KEY = "simple-closing-draft";
 
@@ -95,6 +95,7 @@ export function SimpleReport() {
   }, []);
 
   const totalCapital = numberValue(initialCapital) + numberValue(todayCapital);
+  const balance = totalCapital - numberValue(totalPurchases) - numberValue(totalCosts);
 
   const formattedDate = useMemo(() => {
     if (!date) return "[TARIKH]";
@@ -104,8 +105,8 @@ export function SimpleReport() {
 
   const reportText = useMemo(
     () =>
-      `*DAILY REPORT*\n${formattedDate}\nCawangan: ${branch || "[Cawangan]"}\n\n──────────────\nModal Awal: RM${money(numberValue(initialCapital))}\nModal Hari Ini: RM${money(numberValue(todayCapital))}\n*Total Modal: RM${money(totalCapital)}*\n\n──────────────\n*Total Kos: RM${money(numberValue(totalCosts))}*\n*Total Belian: RM${money(numberValue(totalPurchases))}*`,
-    [formattedDate, branch, initialCapital, todayCapital, totalCapital, totalCosts, totalPurchases],
+      `*DAILY REPORT*\n${formattedDate}\nCawangan: ${branch || "[Cawangan]"}\n\n──────────────\nModal Awal: RM${money(numberValue(initialCapital))}\nModal Hari Ini: RM${money(numberValue(todayCapital))}\n*Total Modal: RM${money(totalCapital)}*\n\n──────────────\n*Total Kos: RM${money(numberValue(totalCosts))}*\n*Total Belian: RM${money(numberValue(totalPurchases))}*\n\n──────────────\n*BAKI MODAL*\n*RM${money(balance)}*`,
+    [formattedDate, branch, initialCapital, todayCapital, totalCapital, totalCosts, totalPurchases, balance],
   );
 
   const copyReport = async () => {
@@ -130,8 +131,8 @@ export function SimpleReport() {
     <>
       <div className="page-shell">
         <section className="intro compact">
-          <span className="eyebrow">CLOSING RINGKAS · LAPORAN HARIAN</span>
-          <h1>Closing <em>versi ringkas.</em></h1>
+          <span className="eyebrow">REPORT · LAPORAN HARIAN</span>
+          <h1>Report <em>harian ringkas.</em></h1>
           <p>Isi jumlah sahaja dan salin ke WhatsApp. <span className="status"><i /> Auto simpan</span></p>
         </section>
 
@@ -174,6 +175,10 @@ export function SimpleReport() {
                 <BadgeDollarSign size={23} />
               </div>
               <pre>{reportText}</pre>
+              <div className={`balance ${balance < 0 ? "negative" : ""}`}>
+                <span><Coins size={18} /> Baki Modal</span>
+                <strong>RM{money(balance)}</strong>
+              </div>
               <button className={`copy-button ${copied ? "copied" : ""}`} onClick={copyReport}>
                 {copied ? <Check size={20} /> : <ClipboardCopy size={20} />}
                 {copied ? "Berjaya Disalin!" : "Salin untuk WhatsApp"}
@@ -186,7 +191,7 @@ export function SimpleReport() {
         </div>
       </div>
       <div className="mobile-action" aria-live="polite">
-        <div><span>Total modal</span><strong>RM{money(totalCapital)}</strong></div>
+        <div><span>Baki modal</span><strong>RM{money(balance)}</strong></div>
         <button onClick={copyReport} className={copied ? "copied" : ""}>
           {copied ? <Check size={19} /> : <ClipboardCopy size={19} />}
           {copied ? "Disalin" : "Salin laporan"}

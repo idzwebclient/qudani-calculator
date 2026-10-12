@@ -7,7 +7,7 @@ import { Calculator, FileText, ListChecks } from "lucide-react";
 const tabs = [
   { href: "/", label: "Kalkulator", icon: Calculator },
   { href: "/closing", label: "Closing", icon: FileText },
-  { href: "/ringkas", label: "Ringkas", icon: ListChecks },
+  { href: "/report", label: "Report", icon: ListChecks },
 ] as const;
 
 export function AppHeader() {
