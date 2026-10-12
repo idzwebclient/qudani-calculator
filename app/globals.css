@@ -80,7 +80,7 @@ input[type="date"]::-webkit-date-and-time-value { text-align: left; margin: 0; l
 .subtotal span { font-size: 11px; font-weight: 700; }
 .subtotal strong { font-size: 17px; }
 .subtotal.blue { background: var(--blue-soft); color: var(--blue); }
-.final-input .field { max-width: 50%; }
+.final-input > .field { max-width: 50%; }
 
 .preview-column { position: sticky; top: 84px; }
 .preview-card { padding: 24px; box-shadow: 0 14px 35px rgba(34,48,41,.075); border-top: 3px solid var(--green); }
@@ -162,6 +162,7 @@ pre { margin: 0; padding: 22px 2px; max-height: 52vh; overflow: auto; white-spac
 .calc-card .primary-button { margin-top: 4px; }
 .calc-card .privacy-note { margin: -4px 0 0; }
 .segmented { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 4px; border-radius: 12px; background: #eef1ef; border: 1px solid var(--line); }
+.segmented.two { grid-template-columns: repeat(2, 1fr); margin-bottom: 14px; }
 .segmented button { min-height: 42px; padding: 6px 8px; border: 0; border-radius: 9px; background: transparent; color: var(--muted); font-size: 13px; font-weight: 800; line-height: 1.2; }
 .segmented button.active { background: #fff; color: var(--green); box-shadow: 0 2px 8px rgba(26,43,35,.08); }
 .affix-input { position: relative; }

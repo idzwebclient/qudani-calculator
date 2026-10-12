@@ -20,6 +20,7 @@ import {
 
 type Purchase = { id: number; amount: string; quality: string; weight: string };
 type Cost = { id: number; description: string; amount: string };
+type CapitalReturnType = "pulang" | "pass";
 
 const today = () => {
   const parts = new Intl.DateTimeFormat("en-CA", {
@@ -66,6 +67,8 @@ export function ReportBuilder() {
   const [initialCapital, setInitialCapital] = useState("");
   const [todayCapital, setTodayCapital] = useState("");
   const [returnedCapital, setReturnedCapital] = useState("");
+  const [returnType, setReturnType] = useState<CapitalReturnType>("pulang");
+  const [returnTo, setReturnTo] = useState("");
   const [purchases, setPurchases] = useState<Purchase[]>([
     { id: 1, amount: "", quality: "", weight: "" },
   ]);
@@ -85,6 +88,8 @@ export function ReportBuilder() {
           setInitialCapital(draft.initialCapital || "");
           setTodayCapital(draft.todayCapital || "");
           setReturnedCapital(draft.returnedCapital || "");
+          setReturnType(draft.returnType === "pass" ? "pass" : "pulang");
+          setReturnTo(draft.returnTo || "");
           if (Array.isArray(draft.purchases) && draft.purchases.length) setPurchases(draft.purchases);
           if (Array.isArray(draft.costs) && draft.costs.length) setCosts(draft.costs);
         }
@@ -102,9 +107,9 @@ export function ReportBuilder() {
     if (!ready) return;
     window.localStorage.setItem(
       "staff-closing-draft",
-      JSON.stringify({ date, staff, initialCapital, todayCapital, returnedCapital, purchases, costs }),
+      JSON.stringify({ date, staff, initialCapital, todayCapital, returnedCapital, returnType, returnTo, purchases, costs }),
     );
-  }, [ready, date, staff, initialCapital, todayCapital, returnedCapital, purchases, costs]);
+  }, [ready, date, staff, initialCapital, todayCapital, returnedCapital, returnType, returnTo, purchases, costs]);
 
   useEffect(() => () => {
     if (copyTimer.current) window.clearTimeout(copyTimer.current);
@@ -114,6 +119,8 @@ export function ReportBuilder() {
   const totalCosts = costs.reduce((sum, item) => sum + numberValue(item.amount), 0);
   const totalCapital = numberValue(initialCapital) + numberValue(todayCapital);
   const balance = totalCapital - totalPurchases - totalCosts - numberValue(returnedCapital);
+
+  const returnLabel = returnType === "pass" ? "Pass Modal" : "Pulang Modal";
 
   const formattedDate = useMemo(() => {
     if (!date) return "[TARIKH]";
@@ -133,8 +140,8 @@ export function ReportBuilder() {
       .map((item) => `• ${item.description || "-"}: RM${money(numberValue(item.amount))}`)
       .join("\n");
 
-    return `*DAILY REPORT*\n${formattedDate}\nStaff: ${staff || "[Nama Staff]"}\n\n──────────────\n*BELIAN HARI INI*\n${purchaseLines}\n\n*Total Belian: RM${money(totalPurchases)}*\n\n──────────────\n*MODAL*\nModal Awal: RM${money(numberValue(initialCapital))}\nModal Hari Ini: RM${money(numberValue(todayCapital))}\n*Total Modal: RM${money(totalCapital)}*\n\n──────────────\n*KOS*\n${costLines}\n\n*Total Kos: RM${money(totalCosts)}*\n\n──────────────\n*PULANG MODAL*\nRM${money(numberValue(returnedCapital))}\n\n──────────────\n*BAKI MODAL*\n*RM${money(balance)}*`;
-  }, [purchases, costs, formattedDate, staff, totalPurchases, initialCapital, todayCapital, totalCapital, totalCosts, returnedCapital, balance]);
+    return `*DAILY REPORT*\n${formattedDate}\nStaff: ${staff || "[Nama Staff]"}\n\n──────────────\n*BELIAN HARI INI*\n${purchaseLines}\n\n*Total Belian: RM${money(totalPurchases)}*\n\n──────────────\n*MODAL*\nModal Awal: RM${money(numberValue(initialCapital))}\nModal Hari Ini: RM${money(numberValue(todayCapital))}\n*Total Modal: RM${money(totalCapital)}*\n\n──────────────\n*KOS*\n${costLines}\n\n*Total Kos: RM${money(totalCosts)}*\n\n──────────────\n*${returnLabel.toUpperCase()}*\nKepada: ${returnTo || "-"}\nRM${money(numberValue(returnedCapital))}\n\n──────────────\n*BAKI MODAL*\n*RM${money(balance)}*`;
+  }, [purchases, costs, formattedDate, staff, totalPurchases, initialCapital, todayCapital, totalCapital, totalCosts, returnLabel, returnTo, returnedCapital, balance]);
 
   const updatePurchase = (id: number, field: keyof Omit<Purchase, "id">, value: string) => {
     setPurchases((items) => items.map((item) => (item.id === id ? { ...item, [field]: value } : item)));
@@ -160,6 +167,8 @@ export function ReportBuilder() {
     setInitialCapital("");
     setTodayCapital("");
     setReturnedCapital("");
+    setReturnType("pulang");
+    setReturnTo("");
     setPurchases([{ id: Date.now(), amount: "", quality: "", weight: "" }]);
     setCosts([{ id: Date.now() + 1, description: "", amount: "" }]);
     window.localStorage.removeItem("staff-closing-draft");
@@ -232,8 +241,15 @@ export function ReportBuilder() {
             </section>
 
             <section className="card final-input">
-              <SectionTitle icon={<RotateCcw size={20} />} title="Pulang Modal" hint="Jumlah modal yang dipulangkan" />
-              <Field label="JUMLAH PULANG MODAL (RM)"><input type="number" min="0" step="0.01" inputMode="decimal" value={returnedCapital} onChange={(e) => setReturnedCapital(e.target.value)} placeholder="0.00" /></Field>
+              <SectionTitle icon={<RotateCcw size={20} />} title="Pulang / Pass Modal" hint="Modal yang dipulangkan atau diserahkan" />
+              <div className="segmented two" role="group" aria-label="Jenis">
+                <button type="button" className={returnType === "pulang" ? "active" : ""} aria-pressed={returnType === "pulang"} onClick={() => setReturnType("pulang")}>Pulang Modal</button>
+                <button type="button" className={returnType === "pass" ? "active" : ""} aria-pressed={returnType === "pass"} onClick={() => setReturnType("pass")}>Pass Modal</button>
+              </div>
+              <div className="two-columns">
+                <Field label="KEPADA SIAPA"><input type="text" value={returnTo} onChange={(e) => setReturnTo(e.target.value)} placeholder="Contoh: Boss / Aisyah" /></Field>
+                <Field label={`JUMLAH ${returnLabel.toUpperCase()} (RM)`}><input type="number" min="0" step="0.01" inputMode="decimal" value={returnedCapital} onChange={(e) => setReturnedCapital(e.target.value)} placeholder="0.00" /></Field>
+              </div>
             </section>
           </div>
 
