@@ -3,8 +3,11 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   turbopack: { root: __dirname },
   async redirects() {
-    // Pautan lama /kalkulator kini terus ke halaman utama.
-    return [{ source: "/kalkulator/:path*", destination: "/", permanent: true }];
+    // Pautan lama /kalkulator kini terus ke halaman utama, /ringkas ke /report.
+    return [
+      { source: "/kalkulator/:path*", destination: "/", permanent: true },
+      { source: "/ringkas", destination: "/report", permanent: true },
+    ];
   },
   async headers() {
     return [
