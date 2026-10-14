@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { BadgeDollarSign, Banknote, CalendarDays, Check, ChevronRight, ClipboardCopy, Coins, Minus, Store } from "lucide-react";
+import { BadgeDollarSign, Banknote, CalendarDays, Check, ChevronRight, ClipboardCopy, Coins, Minus, RotateCcw, Store } from "lucide-react";
 
 const DRAFT_KEY = "simple-closing-draft";
+
+type CapitalReturnType = "pulang" | "pass";
 
 const today = () => {
   const parts = new Intl.DateTimeFormat("en-CA", {
@@ -55,6 +57,9 @@ export function SimpleReport() {
   const [todayCapital, setTodayCapital] = useState("");
   const [totalCosts, setTotalCosts] = useState("");
   const [totalPurchases, setTotalPurchases] = useState("");
+  const [returnedCapital, setReturnedCapital] = useState("");
+  const [returnType, setReturnType] = useState<CapitalReturnType>("pulang");
+  const [returnTo, setReturnTo] = useState("");
   const [copied, setCopied] = useState(false);
   const [ready, setReady] = useState(false);
   const copyTimer = useRef<number | null>(null);
@@ -71,6 +76,9 @@ export function SimpleReport() {
           setTodayCapital(draft.todayCapital || "");
           setTotalCosts(draft.totalCosts || "");
           setTotalPurchases(draft.totalPurchases || "");
+          setReturnedCapital(draft.returnedCapital || "");
+          setReturnType(draft.returnType === "pass" ? "pass" : "pulang");
+          setReturnTo(draft.returnTo || "");
         }
       } catch {
         window.localStorage.removeItem(DRAFT_KEY);
@@ -86,16 +94,17 @@ export function SimpleReport() {
     if (!ready) return;
     window.localStorage.setItem(
       DRAFT_KEY,
-      JSON.stringify({ date, branch, initialCapital, todayCapital, totalCosts, totalPurchases }),
+      JSON.stringify({ date, branch, initialCapital, todayCapital, totalCosts, totalPurchases, returnedCapital, returnType, returnTo }),
     );
-  }, [ready, date, branch, initialCapital, todayCapital, totalCosts, totalPurchases]);
+  }, [ready, date, branch, initialCapital, todayCapital, totalCosts, totalPurchases, returnedCapital, returnType, returnTo]);
 
   useEffect(() => () => {
     if (copyTimer.current) window.clearTimeout(copyTimer.current);
   }, []);
 
   const totalCapital = numberValue(initialCapital) + numberValue(todayCapital);
-  const balance = totalCapital - numberValue(totalPurchases) - numberValue(totalCosts);
+  const balance = totalCapital - numberValue(totalPurchases) - numberValue(totalCosts) - numberValue(returnedCapital);
+  const returnLabel = returnType === "pass" ? "Pass Modal" : "Pulang Modal";
 
   const formattedDate = useMemo(() => {
     if (!date) return "[TARIKH]";
@@ -105,8 +114,8 @@ export function SimpleReport() {
 
   const reportText = useMemo(
     () =>
-      `*DAILY REPORT*\n${formattedDate}\nCawangan: ${branch || "[Cawangan]"}\n\n──────────────\nModal Awal: RM${money(numberValue(initialCapital))}\nModal Hari Ini: RM${money(numberValue(todayCapital))}\n*Total Modal: RM${money(totalCapital)}*\n\n──────────────\n*Total Kos: RM${money(numberValue(totalCosts))}*\n*Total Belian: RM${money(numberValue(totalPurchases))}*\n\n──────────────\n*BAKI MODAL*\n*RM${money(balance)}*`,
-    [formattedDate, branch, initialCapital, todayCapital, totalCapital, totalCosts, totalPurchases, balance],
+      `*DAILY REPORT*\n${formattedDate}\nCawangan: ${branch || "[Cawangan]"}\n\n──────────────\nModal Awal: RM${money(numberValue(initialCapital))}\nModal Hari Ini: RM${money(numberValue(todayCapital))}\n*Total Modal: RM${money(totalCapital)}*\n\n──────────────\n*Total Kos: RM${money(numberValue(totalCosts))}*\n*Total Belian: RM${money(numberValue(totalPurchases))}*\n\n──────────────\n*${returnLabel.toUpperCase()}*\nKepada: ${returnTo || "-"}\nRM${money(numberValue(returnedCapital))}\n\n──────────────\n*BAKI MODAL*\n*RM${money(balance)}*`,
+    [formattedDate, branch, initialCapital, todayCapital, totalCapital, totalCosts, totalPurchases, returnLabel, returnTo, returnedCapital, balance],
   );
 
   const copyReport = async () => {
@@ -123,6 +132,9 @@ export function SimpleReport() {
     setTodayCapital("");
     setTotalCosts("");
     setTotalPurchases("");
+    setReturnedCapital("");
+    setReturnType("pulang");
+    setReturnTo("");
     window.localStorage.removeItem(DRAFT_KEY);
     setCopied(false);
   };
@@ -164,6 +176,18 @@ export function SimpleReport() {
               <div className="two-columns">
                 <Field label="TOTAL KOS (RM)"><MoneyInput value={totalCosts} onChange={setTotalCosts} /></Field>
                 <Field label="TOTAL BELIAN (RM)"><MoneyInput value={totalPurchases} onChange={setTotalPurchases} /></Field>
+              </div>
+            </section>
+
+            <section className="card">
+              <SectionTitle icon={<RotateCcw size={20} />} title="Pulang / Pass Modal" hint="Modal yang dipulangkan atau diserahkan" />
+              <div className="segmented two" role="group" aria-label="Jenis">
+                <button type="button" className={returnType === "pulang" ? "active" : ""} aria-pressed={returnType === "pulang"} onClick={() => setReturnType("pulang")}>Pulang Modal</button>
+                <button type="button" className={returnType === "pass" ? "active" : ""} aria-pressed={returnType === "pass"} onClick={() => setReturnType("pass")}>Pass Modal</button>
+              </div>
+              <div className="two-columns">
+                <Field label="KEPADA SIAPA"><input type="text" value={returnTo} onChange={(e) => setReturnTo(e.target.value)} placeholder="Contoh: Boss / Aisyah" /></Field>
+                <Field label={`JUMLAH ${returnLabel.toUpperCase()} (RM)`}><MoneyInput value={returnedCapital} onChange={setReturnedCapital} /></Field>
               </div>
             </section>
           </div>
