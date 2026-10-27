@@ -1,8 +1,12 @@
 // Tukar versi ini untuk paksa semua peranti muat turun semula app shell.
-const CACHE_NAME = "qudani-v2";
+const CACHE_NAME = "qudani-v3";
 const APP_SHELL = [
   "/",
   "/closing",
+  "/report",
+  "/form",
+  "/form/claim",
+  "/form/advance",
   "/manifest.webmanifest",
   "/icons/icon-192.png",
   "/icons/icon-512.png",
@@ -36,7 +40,7 @@ self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET" || url.origin !== self.location.origin) return;
 
   // Fail statik (nama berhash) — cache dahulu, sangat laju.
-  if (url.pathname.startsWith("/_next/static/") || url.pathname.startsWith("/icons/")) {
+  if (url.pathname.startsWith("/_next/static/") || url.pathname.startsWith("/icons/") || url.pathname.startsWith("/brand/")) {
     event.respondWith(
       caches.match(event.request).then((cached) => cached || fetch(event.request).then((res) => putInCache(event.request, res))),
     );

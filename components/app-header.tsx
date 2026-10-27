@@ -2,19 +2,20 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Calculator, FileText, ListChecks } from "lucide-react";
+import { Calculator, ClipboardList, FileText, ListChecks } from "lucide-react";
 
 const tabs = [
   { href: "/", label: "Kalkulator", icon: Calculator },
   { href: "/closing", label: "Closing", icon: FileText },
   { href: "/report", label: "Report", icon: ListChecks },
+  { href: "/form", label: "Form", icon: ClipboardList },
 ] as const;
 
 export function AppHeader() {
   const pathname = usePathname();
 
   return (
-    <header className="topbar">
+    <header className="topbar app-header no-print">
       <Link href="/" className="brand" aria-label="Qudani, kalkulator">
         <span className="brand-mark">Q</span>
         <div><strong>Qudani</strong><small>Jewels</small></div>

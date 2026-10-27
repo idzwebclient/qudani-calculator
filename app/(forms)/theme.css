@@ -1,0 +1,79 @@
+/* Tema Qudani (sama seperti Kalkulator/Closing/Report) untuk paparan skrin
+   borang. Hanya header dan bahagian editor ditukar; kertas borang (.paper)
+   dan susun atur cetakan kekal seperti asal. */
+
+:root {
+  --q-ink: #17251f;
+  --q-muted: #6c7771;
+  --q-line: #dfe4e1;
+  --q-bg: #f5f6f3;
+  --q-green: #0c7a55;
+  --q-green-dark: #095d42;
+  --q-green-soft: #e6f4ed;
+  --q-mint: #7fdcb1;
+  --q-gold: #b8862f;
+  --accent: var(--q-mint);
+}
+
+body { background: var(--q-bg); color: var(--q-ink); font-family: var(--font-manrope), Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--q-green); outline-offset: 2px; }
+
+/* Header utama app (sama seperti halaman lain) */
+.app-header.topbar { min-height: 64px; height: auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: env(safe-area-inset-top) max(20px, calc((100vw - 1120px) / 2)) 0; background: rgba(255,255,255,.92); color: var(--q-ink); border-bottom: 1px solid var(--q-line); flex-wrap: nowrap; }
+.app-header .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; min-width: 0; color: inherit; }
+.app-header .brand-mark { width: 38px; height: 38px; flex: none; border-radius: 12px; display: grid; place-items: center; color: white; background: var(--q-green); box-shadow: 0 7px 18px rgba(12,122,85,.22); font-weight: 800; font-size: 19px; }
+.app-header .brand div { display: grid; line-height: 1.15; }
+.app-header .brand strong { font-size: 15px; letter-spacing: -.02em; }
+.app-header .brand small { margin-top: 2px; color: var(--q-gold); font-size: 10px; text-transform: uppercase; letter-spacing: .16em; font-weight: 800; }
+.app-header .tabs { display: flex; gap: 4px; padding: 4px; border-radius: 12px; background: #eef1ef; border: 1px solid var(--q-line); }
+.app-header .tab { display: flex; align-items: center; gap: 7px; height: 38px; padding: 0 14px; border-radius: 9px; text-decoration: none; color: var(--q-muted); font-size: 13px; font-weight: 800; transition: background .15s, color .15s; }
+.app-header .tab:hover { color: var(--q-ink); }
+.app-header .tab.active { background: #fff; color: var(--q-green); box-shadow: 0 2px 8px rgba(26,43,35,.08); }
+
+/* Bar menu borang: cerah dan hijau, bukan hitam/lime */
+.app-shell > .topbar { background: #fff; color: var(--q-ink); border-bottom: 1px solid var(--q-line); height: 64px; }
+.app-shell .brand-logo, .app-shell .brand-divider { display: none; }
+.app-shell .brand-lockup { gap: 0; }
+.form-menu-label { color: var(--q-muted); }
+.form-menu-item { color: var(--q-muted); }
+.form-menu-item:hover { color: var(--q-ink); }
+.form-menu-item.active { border-color: var(--q-green); color: var(--q-green); }
+.save-status { color: var(--q-muted); }
+.topbar-action-divider { background: var(--q-line); }
+
+.button { border-radius: 10px; border-color: var(--q-line); }
+.button-primary { background: var(--q-green); border-color: var(--q-green); color: #fff; box-shadow: 0 8px 18px rgba(12,122,85,.18); }
+.button-primary:hover { background: var(--q-green-dark); border-color: var(--q-green-dark); }
+.app-shell > .topbar .button-ghost { background: #fff; border-color: var(--q-line); color: var(--q-muted); }
+.app-shell > .topbar .button-ghost:hover { color: var(--q-ink); border-color: #c5ccc8; }
+.button-small { color: var(--q-green); border-color: #b9cdc3; }
+.text-button { color: var(--q-green); }
+
+/* Panel editor */
+.editor-panel { background: var(--q-bg); border-right-color: var(--q-line); }
+.preview-panel { background: #eef1ef; }
+.editor-panel .eyebrow, .editor-panel .step-label { color: var(--q-green); }
+.capital-card-heading .step-label { color: var(--accent); }
+.page-count { background: var(--q-green-soft); color: var(--q-green-dark); }
+.editor-panel label { color: #758078; }
+.editor-panel .capital-card label { color: #c5c5bd; }
+.editor-panel .other-cost-row label { color: #989991; }
+.app-shell input, .app-shell textarea { border-color: #d5dcd8; border-radius: 10px; color: var(--q-ink); }
+.app-shell input:focus, .app-shell textarea:focus { border-color: #5ba88b; box-shadow: 0 0 0 3px rgba(12,122,85,.09); }
+.app-shell .item-row input { border-radius: 6px; }
+.app-shell .item-row input:focus { background: #f4fbf7; }
+.customer-editor, .claim-entry-list { border-color: #e1e6e3; border-radius: 16px; box-shadow: 0 3px 12px rgba(34,48,41,.035); }
+.customer-tab.active { background: var(--q-green); border-color: var(--q-green); }
+.customer-tab.active span { background: #fff; color: var(--q-green); }
+.capital-card, .claim-total-card { background: var(--q-ink); border-radius: 16px; }
+
+@media (max-width: 620px) {
+  .app-header.topbar { padding-left: 14px; padding-right: 14px; }
+  .app-header .brand div { display: none; }
+  .app-header .tabs { min-width: 0; }
+  .app-header .tab { padding: 0 9px; gap: 4px; }
+}
+
+@media (max-width: 680px) {
+  .app-shell > .topbar { height: auto; }
+}

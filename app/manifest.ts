@@ -22,6 +22,7 @@ export default function manifest(): MetadataRoute.Manifest {
     shortcuts: [
       { name: "Kalkulator", short_name: "Kalkulator", url: "/", icons: [{ src: "/icons/icon-192.png", sizes: "192x192" }] },
       { name: "Staff Closing", short_name: "Closing", url: "/closing", icons: [{ src: "/icons/icon-192.png", sizes: "192x192" }] },
+      { name: "Borang Qudani", short_name: "Form", url: "/form", icons: [{ src: "/icons/icon-192.png", sizes: "192x192" }] },
     ],
   };
 }
