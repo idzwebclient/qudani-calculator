@@ -103,6 +103,7 @@ export function SimpleReport() {
   }, []);
 
   const totalCapital = numberValue(initialCapital) + numberValue(todayCapital);
+  const totalCostsAndPurchases = numberValue(totalCosts) + numberValue(totalPurchases);
   const balance = totalCapital - numberValue(totalPurchases) - numberValue(totalCosts) - numberValue(returnedCapital);
   const returnLabel = returnType === "pass" ? "Pass Modal" : "Pulang Modal";
 
@@ -114,8 +115,8 @@ export function SimpleReport() {
 
   const reportText = useMemo(
     () =>
-      `*DAILY REPORT*\n${formattedDate}\nCawangan: ${branch || "[Cawangan]"}\n\n──────────────\nModal Awal: RM${money(numberValue(initialCapital))}\nModal Hari Ini: RM${money(numberValue(todayCapital))}\n*Total Modal: RM${money(totalCapital)}*\n\n──────────────\n*Total Kos: RM${money(numberValue(totalCosts))}*\n*Total Belian: RM${money(numberValue(totalPurchases))}*\n\n──────────────\n*${returnLabel.toUpperCase()}*\nKepada: ${returnTo || "-"}\nRM${money(numberValue(returnedCapital))}\n\n──────────────\n*BAKI MODAL*\n*RM${money(balance)}*`,
-    [formattedDate, branch, initialCapital, todayCapital, totalCapital, totalCosts, totalPurchases, returnLabel, returnTo, returnedCapital, balance],
+      `*DAILY REPORT*\n${formattedDate}\nCawangan: ${branch || "[Cawangan]"}\n\n──────────────\nModal Awal: RM${money(numberValue(initialCapital))}\nModal Hari Ini: RM${money(numberValue(todayCapital))}\n*Total Modal: RM${money(totalCapital)}*\n\n──────────────\n*Total Kos: RM${money(numberValue(totalCosts))}*\n*Total Belian: RM${money(numberValue(totalPurchases))}*\n*Total Kos + Belian: RM${money(totalCostsAndPurchases)}*\n\n──────────────\n*${returnLabel.toUpperCase()}*\nKepada: ${returnTo || "-"}\nRM${money(numberValue(returnedCapital))}\n\n──────────────\n*BAKI MODAL*\n*RM${money(balance)}*`,
+    [formattedDate, branch, initialCapital, todayCapital, totalCapital, totalCosts, totalPurchases, totalCostsAndPurchases, returnLabel, returnTo, returnedCapital, balance],
   );
 
   const copyReport = async () => {
@@ -177,6 +178,7 @@ export function SimpleReport() {
                 <Field label="TOTAL KOS (RM)"><MoneyInput value={totalCosts} onChange={setTotalCosts} /></Field>
                 <Field label="TOTAL BELIAN (RM)"><MoneyInput value={totalPurchases} onChange={setTotalPurchases} /></Field>
               </div>
+              <div className="subtotal"><span>Total Kos + Belian</span><strong>RM{money(totalCostsAndPurchases)}</strong></div>
             </section>
 
             <section className="card">
