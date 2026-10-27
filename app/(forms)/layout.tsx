@@ -37,7 +37,7 @@ export const viewport: Viewport = {
 
 export default function FormsLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="ms" className={manrope.variable} data-credit="By Trulab Studio 60176982032">
+    <html lang="ms" className={manrope.variable}>
       <body>
         <PwaRegistration />
         <AppHeader />
