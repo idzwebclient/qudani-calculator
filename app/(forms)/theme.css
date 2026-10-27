@@ -70,8 +70,8 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--q-green); outli
 @media (max-width: 620px) {
   .app-header.topbar { padding-left: 14px; padding-right: 14px; }
   .app-header .brand div { display: none; }
-  .app-header .tabs { min-width: 0; }
-  .app-header .tab { padding: 0 9px; gap: 4px; }
+  .app-header .tabs { flex: 1; min-width: 0; }
+  .app-header .tab { flex: 1; min-width: 0; flex-direction: column; justify-content: center; height: 46px; padding: 0 2px; gap: 2px; font-size: 10px; }
 }
 
 @media (max-width: 680px) {

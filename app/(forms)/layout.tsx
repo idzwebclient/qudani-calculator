@@ -12,6 +12,7 @@ export const metadata: Metadata = {
   title: { default: "Form", template: "%s · Qudani" },
   description: "Jana dan cetak borang rasmi Qudani Jewels.",
   applicationName: "Qudani",
+  authors: [{ name: "By Trulab Studio 60176982032" }],
   appleWebApp: {
     capable: true,
     title: "Qudani",

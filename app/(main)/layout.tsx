@@ -10,6 +10,7 @@ export const metadata: Metadata = {
   title: { default: "Qudani", template: "%s · Qudani" },
   description: "Kalkulator pajak & emas serta laporan closing harian Qudani.",
   applicationName: "Qudani",
+  authors: [{ name: "By Trulab Studio 60176982032" }],
   appleWebApp: {
     capable: true,
     title: "Qudani",
