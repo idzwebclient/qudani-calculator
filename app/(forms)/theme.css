@@ -59,6 +59,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--q-green); outli
 .editor-panel .capital-card label { color: #c5c5bd; }
 .editor-panel .other-cost-row label { color: #989991; }
 .app-shell input, .app-shell textarea { border-color: #d5dcd8; border-radius: 10px; color: var(--q-ink); }
+.app-shell .capital-card input { border-color: #44443e; color: #fff; }
 .app-shell input:focus, .app-shell textarea:focus { border-color: #5ba88b; box-shadow: 0 0 0 3px rgba(12,122,85,.09); }
 .app-shell .item-row input { border-radius: 6px; }
 .app-shell .item-row input:focus { background: #f4fbf7; }
